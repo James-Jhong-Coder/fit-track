@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+@theme {
+    --color-green-100: #2a6041;
+
+    --color-gray-150: #333333;
+}
+
+@utility bg-menu-dialog {
+    background: linear-gradient(0deg, #e8e8e8, #e8e8e8), linear-gradient(0deg, #2a6041, #2a6041);
+}

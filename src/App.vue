@@ -1,5 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+    import { ModalsContainer } from 'vue-final-modal'
+</script>
 
-<template>ds</template>
-
-<style scoped></style>
+<template>
+    <RouterView />
+    <ModalsContainer />
+</template>
