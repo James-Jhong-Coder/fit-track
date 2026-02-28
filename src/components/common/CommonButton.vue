@@ -47,7 +47,7 @@
             -24.6px 24.6px 24.6px 0px #ffffff1a inset,
             24.6px -24.6px 24.6px 0px #2049311a inset;
         backdrop-filter: blur(49.20000076293945px);
-        @apply text-white;
+        @apply text-black;
         @apply hover:bg-white/10 active:scale-95;
     }
 </style>
