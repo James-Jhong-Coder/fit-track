@@ -13,6 +13,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     CommonButton: typeof import('./components/common/CommonButton.vue')['default']
     CommonCard: typeof import('./components/common/CommonCard.vue')['default']
+    CommonInput: typeof import('./components/common/CommonInput.vue')['default']
+    CommonSelect: typeof import('./components/common/CommonSelect.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SvgIcon: typeof import('./components/common/SvgIcon.vue')['default']
