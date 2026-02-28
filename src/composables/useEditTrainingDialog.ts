@@ -2,8 +2,20 @@ import { useModal } from 'vue-final-modal'
 
 import DialogEditTraining from '@/components/dialogs/DialogEditTraining.vue'
 
-interface ExerciseOption { id: number; name: string }
-interface PlanData { name: string; exercises: ExerciseOption[] }
+interface ExerciseOption {
+    id: number
+    name: string
+}
+interface PlanData {
+    name: string
+    exercises: ExerciseOption[]
+}
+
+interface OpenEditTrainingParams {
+    exerciseOptions: ExerciseOption[]
+    initial: PlanData
+    onConfirmed: (data: PlanData) => void
+}
 
 export function useEditTrainingDialog() {
     const { open, close, patchOptions } = useModal({
@@ -12,16 +24,16 @@ export function useEditTrainingDialog() {
             exerciseOptions: [],
             initialName: '',
             initialExercises: [],
-            onConfirm() { close() },
-            onCancel() { close() },
+            onConfirm() {
+                close()
+            },
+            onCancel() {
+                close()
+            },
         },
     })
 
-    function openDialog(
-        exerciseOptions: ExerciseOption[],
-        initial: { name: string; exercises: ExerciseOption[] },
-        onConfirmed: (data: PlanData) => void,
-    ) {
+    function openDialog({ exerciseOptions, initial, onConfirmed }: OpenEditTrainingParams) {
         patchOptions({
             attrs: {
                 exerciseOptions,
@@ -31,7 +43,9 @@ export function useEditTrainingDialog() {
                     onConfirmed(data)
                     close()
                 },
-                onCancel() { close() },
+                onCancel() {
+                    close()
+                },
             },
         })
         open()

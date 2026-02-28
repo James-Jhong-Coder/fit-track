@@ -5,6 +5,11 @@ import DialogAddTraining from '@/components/dialogs/DialogAddTraining.vue'
 interface ExerciseOption { id: number; name: string }
 interface PlanData { name: string; exercises: ExerciseOption[] }
 
+interface OpenAddTrainingParams {
+    exerciseOptions: ExerciseOption[]
+    onConfirmed: (data: PlanData) => void
+}
+
 export function useAddTrainingDialog() {
     const { open, close, patchOptions } = useModal({
         component: DialogAddTraining,
@@ -15,10 +20,7 @@ export function useAddTrainingDialog() {
         },
     })
 
-    function openDialog(
-        exerciseOptions: ExerciseOption[],
-        onConfirmed: (data: PlanData) => void,
-    ) {
+    function openDialog({ exerciseOptions, onConfirmed }: OpenAddTrainingParams) {
         patchOptions({
             attrs: {
                 exerciseOptions,

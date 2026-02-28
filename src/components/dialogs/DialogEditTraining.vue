@@ -5,7 +5,10 @@
     import CommonInput from '@/components/common/CommonInput.vue'
     import CommonSelect from '@/components/common/CommonSelect.vue'
 
-    interface ExerciseOption { id: number; name: string }
+    interface ExerciseOption {
+        id: number
+        name: string
+    }
 
     const props = defineProps<{
         exerciseOptions: ExerciseOption[]
@@ -49,7 +52,7 @@
 <template>
     <VueFinalModal
         class="flex items-center justify-center"
-        content-class="w-[80%]"
+        content-class="w-[90%]"
         overlay-transition="vfm-fade"
         content-transition="vfm-fade"
     >
@@ -63,31 +66,29 @@
 
             <div class="training-dialog-body">
                 <CommonInput v-model="planName" title="課表名稱" />
-
-                <ul v-if="selectedExercises.length" class="mt-4 flex flex-col gap-2">
-                    <li
-                        v-for="(ex, i) in selectedExercises"
-                        :key="ex.id"
-                        class="exercise-item"
-                    >
-                        <span class="text-sm text-gray-150">動作：{{ ex.name }}</span>
-                        <button class="remove-btn" @click="removeExercise(i)">
-                            <SvgIcon name="icon_minus" class="w-4 h-4" />
-                        </button>
-                    </li>
-                </ul>
-
-                <div class="add-exercise-row mt-4">
+                <div class="flex items-center mt-5">
                     <CommonSelect
                         v-model="exerciseToAdd"
                         title="選擇動作"
                         :options="availableExercises"
                         class="flex-1"
                     />
-                    <button class="add-btn" :disabled="!exerciseToAdd" @click="addExercise">
-                        <SvgIcon name="icon_plus" class="w-4 h-4" />
-                    </button>
+                    <SvgIcon
+                        name="icon_plus"
+                        class="w-6 h-6 text-green-100 ml-4"
+                        @click="addExercise"
+                    />
                 </div>
+                <ul v-if="selectedExercises.length" class="mt-6 flex flex-col gap-2">
+                    <li v-for="(ex, i) in selectedExercises" :key="ex.id" class="exercise-item">
+                        <span class="text-sm text-gray-150">動作：{{ ex.name }}</span>
+                        <SvgIcon
+                            name="icon_minus"
+                            class="w-6 h-6 text-red-700"
+                            @click="removeExercise(i)"
+                        />
+                    </li>
+                </ul>
             </div>
 
             <div class="training-dialog-footer">
@@ -119,20 +120,7 @@
     }
 
     .exercise-item {
-        @apply flex items-center justify-between rounded-xl px-4 py-3 bg-gray-50;
-    }
-
-    .remove-btn {
-        @apply flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-white shrink-0;
-    }
-
-    .add-exercise-row {
-        @apply flex items-center gap-3;
-    }
-
-    .add-btn {
-        @apply flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-white shrink-0;
-        @apply disabled:opacity-40;
+        @apply flex items-center justify-between rounded-xl px-4 py-3 bg-gray-300;
     }
 
     .training-dialog-footer {

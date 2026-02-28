@@ -47,23 +47,26 @@
     })
 
     function onClickAddNewTrainingHandler() {
-        openAddTrainingDialog(exerciseOptions.value, data => {
-            plans.value.push({ id: Date.now(), ...data })
+        openAddTrainingDialog({
+            exerciseOptions: exerciseOptions.value,
+            onConfirmed: data => {
+                plans.value.push({ id: Date.now(), ...data })
+            },
         })
     }
 
-    function handleEdit(plan: WorkoutPlan) {
-        openEditTrainingDialog(
-            exerciseOptions.value,
-            { name: plan.name, exercises: plan.exercises },
-            data => {
+    function onClickEditTrainingHandler(plan: WorkoutPlan) {
+        openEditTrainingDialog({
+            exerciseOptions: exerciseOptions.value,
+            initial: { name: plan.name, exercises: plan.exercises },
+            onConfirmed: data => {
                 const idx = plans.value.findIndex(p => p.id === plan.id)
                 if (idx !== -1) plans.value[idx] = { id: plan.id, ...data }
             },
-        )
+        })
     }
 
-    function handleDelete(plan: WorkoutPlan) {
+    function onClickDeleteTrainingHandler(plan: WorkoutPlan) {
         openDeleteConfirm(() => {
             const idx = plans.value.findIndex(p => p.id === plan.id)
             if (idx !== -1) plans.value.splice(idx, 1)
@@ -98,11 +101,11 @@
                     <li v-for="(plan, i) in filteredPlans" :key="plan.id" class="plan-item">
                         <span class="text-sm text-gray-150">{{ i + 1 }}. {{ plan.name }}</span>
                         <div class="flex items-center gap-2">
-                            <button class="action-btn" @click="handleEdit(plan)">
-                                <SvgIcon name="icon_edit" class="w-4 h-4 text-gray-150/60" />
+                            <button class="action-btn" @click="onClickEditTrainingHandler(plan)">
+                                <SvgIcon name="icon_edit" class="w-5 h-5 text-gray-150/60" />
                             </button>
-                            <button class="delete-btn" @click="handleDelete(plan)">
-                                <SvgIcon name="icon_minus" class="w-4 h-4 text-white" />
+                            <button class="delete-btn" @click="onClickDeleteTrainingHandler(plan)">
+                                <SvgIcon name="icon_minus" class="w-5 h-5" />
                             </button>
                         </div>
                     </li>
@@ -150,6 +153,6 @@
     }
 
     .delete-btn {
-        @apply flex items-center justify-center w-7 h-7 rounded-full bg-green-100;
+        @apply flex items-center justify-center w-7 h-7 rounded-full text-red-700;
     }
 </style>
