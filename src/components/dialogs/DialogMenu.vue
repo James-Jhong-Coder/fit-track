@@ -33,8 +33,8 @@
                 <ul class="menu-list mt-20">
                     <li @click="navigate('/')">首頁</li>
                     <li @click="navigate('/exercises')">動作庫</li>
-                    <li @click="navigate('/training')">新增課表</li>
-                    <li @click="navigate('/schedule')">課表安排</li>
+                    <li @click="navigate('/training')">管理課表內容</li>
+                    <li @click="navigate('/schedule')">安排訓練時間</li>
                 </ul>
             </div>
         </div>
@@ -52,6 +52,7 @@
 
     .menu-dialog-header {
         @apply relative flex items-center justify-center px-7 py-5;
+        @apply text-white;
     }
 
     .menu-close {

@@ -4,6 +4,7 @@
     --color-green-100: #2a6041;
 
     --color-gray-150: #333333;
+    --color-gray-300: #e8e8e8;
 }
 
 @utility bg-menu-dialog {
