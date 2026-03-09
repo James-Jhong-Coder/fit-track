@@ -50,7 +50,7 @@
                 </div>
             </div>
         </CommonCard>
-        <CommonButton class="mt-4 w-full">開始訓練</CommonButton>
+        <CommonButton class="mt-4 w-full text-white!">開始訓練</CommonButton>
     </div>
 </template>
 

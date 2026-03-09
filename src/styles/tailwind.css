@@ -2,9 +2,14 @@
 
 @theme {
     --color-green-100: #2a6041;
+    --color-green-200: #2d5a3d;
+    --color-green-300: #245033;
+    --color-green-350: #222730;
 
     --color-gray-150: #333333;
     --color-gray-300: #e8e8e8;
+    --color-gray-400: #999999;
+    --color-gray-50: #ecefee;
 }
 
 @utility bg-menu-dialog {
