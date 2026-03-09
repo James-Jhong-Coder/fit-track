@@ -1,4 +1,6 @@
 <script setup lang="ts">
+    import { useRouter } from 'vue-router'
+
     import bgHome from '@/assets/img/bg_home.jpg'
     import imgHero from '@/assets/img/img_hero.png'
     import CommonCard from '@/components/common/CommonCard.vue'
@@ -7,6 +9,11 @@
 
     const { year, month, day } = useDate()
     const { open: openMenu } = useMenuDialog()
+    const router = useRouter()
+
+    function startWorkout() {
+        router.push('/workout-session')
+    }
 </script>
 
 <template>
@@ -50,7 +57,7 @@
                 </div>
             </div>
         </CommonCard>
-        <CommonButton class="mt-4 w-full text-white!">開始訓練</CommonButton>
+        <CommonButton class="mt-4 w-full text-white!" @click="startWorkout">開始訓練</CommonButton>
     </div>
 </template>
 
