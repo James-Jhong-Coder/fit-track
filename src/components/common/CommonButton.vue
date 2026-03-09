@@ -38,8 +38,8 @@
 
     /* variant */
     .btn--solid {
-        @apply bg-[#2D5A3D] text-white;
-        @apply hover:bg-[#245033] active:scale-95;
+        @apply bg-green-200 text-white;
+        @apply hover:bg-green-300 active:scale-95;
     }
     .btn--outline {
         border: 1px solid white;

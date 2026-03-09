@@ -25,4 +25,7 @@ export default defineConfig({
             '@': resolve(__dirname, 'src'),
         },
     },
+    server: {
+        allowedHosts: ['unshrined-in-heaviest.ngrok-free.dev'],
+    },
 })
