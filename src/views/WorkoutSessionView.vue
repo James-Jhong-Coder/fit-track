@@ -3,7 +3,7 @@
     import { useRouter } from 'vue-router'
 
     import bgNormal from '@/assets/img/bg_normal.png'
-    import { useMenuDialog } from '@/composables/useMenuDialog'
+    import { useDialogMenu } from '@/composables/useDialogMenu'
 
     interface SetRecord {
         reps: number
@@ -22,7 +22,7 @@
     }
 
     const router = useRouter()
-    const { open: openMenu } = useMenuDialog()
+    const { open: openMenu } = useDialogMenu()
 
     const SESSION_SET_COUNT = 4
 

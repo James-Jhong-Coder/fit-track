@@ -2,10 +2,10 @@
     import { computed, ref } from 'vue'
 
     import bgNormal from '@/assets/img/bg_normal.png'
-    import { useAddTrainingDialog } from '@/composables/useAddTrainingDialog'
-    import { useDeleteConfirmDialog } from '@/composables/useDeleteConfirmDialog'
-    import { useEditTrainingDialog } from '@/composables/useEditTrainingDialog'
-    import { useMenuDialog } from '@/composables/useMenuDialog'
+    import { useDialogAddTraining } from '@/composables/useDialogAddTraining'
+    import { useDialogDeleteConfirm } from '@/composables/useDialogDeleteConfirm'
+    import { useDialogEditTraining } from '@/composables/useDialogEditTraining'
+    import { useDialogMenu } from '@/composables/useDialogMenu'
 
     interface ExerciseOption {
         id: number
@@ -17,10 +17,10 @@
         exercises: ExerciseOption[]
     }
 
-    const { open: openMenu } = useMenuDialog()
-    const { open: openDeleteConfirm } = useDeleteConfirmDialog()
-    const { open: openAddTrainingDialog } = useAddTrainingDialog()
-    const { open: openEditTrainingDialog } = useEditTrainingDialog()
+    const { open: openMenu } = useDialogMenu()
+    const { open: openDeleteConfirm } = useDialogDeleteConfirm()
+    const { open: openAddTrainingDialog } = useDialogAddTraining()
+    const { open: openEditTrainingDialog } = useDialogEditTraining()
 
     const searchQuery = ref('')
 

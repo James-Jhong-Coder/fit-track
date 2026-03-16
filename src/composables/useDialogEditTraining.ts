@@ -17,7 +17,7 @@ interface OpenEditTrainingParams {
     onConfirmed: (data: PlanData) => void
 }
 
-export function useEditTrainingDialog() {
+export function useDialogEditTraining() {
     const { open, close, patchOptions } = useModal({
         component: DialogEditTraining,
         attrs: {

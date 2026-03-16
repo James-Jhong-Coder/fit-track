@@ -10,7 +10,7 @@ interface OpenAddTrainingParams {
     onConfirmed: (data: PlanData) => void
 }
 
-export function useAddTrainingDialog() {
+export function useDialogAddTraining() {
     const { open, close, patchOptions } = useModal({
         component: DialogAddTraining,
         attrs: {

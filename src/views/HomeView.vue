@@ -5,10 +5,10 @@
     import imgHero from '@/assets/img/img_hero.png'
     import CommonCard from '@/components/common/CommonCard.vue'
     import { useDate } from '@/composables/useDate'
-    import { useMenuDialog } from '@/composables/useMenuDialog'
+    import { useDialogMenu } from '@/composables/useDialogMenu'
 
     const { year, month, day } = useDate()
-    const { open: openMenu } = useMenuDialog()
+    const { open: openMenu } = useDialogMenu()
     const router = useRouter()
 
     function startWorkout() {

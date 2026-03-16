@@ -10,10 +10,12 @@
     },
     "dependencies": {
         "@primevue/themes": "^4.5.4",
+        "axios": "^1.13.6",
         "dayjs": "^1.11.19",
         "fast-glob": "^3.3.3",
         "pinia": "^3.0.4",
         "primevue": "^4.5.4",
+        "uuid": "^13.0.0",
         "vue": "^3.5.25",
         "vue-final-modal": "^4.5.5",
         "vue-router": "^5.0.3"
@@ -22,6 +24,7 @@
         "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
         "@tailwindcss/vite": "^4.2.1",
         "@types/node": "^24.10.1",
+        "@types/uuid": "^11.0.0",
         "@vitejs/plugin-vue": "^6.0.2",
         "@vue/tsconfig": "^0.8.1",
         "prettier": "^3.8.1",

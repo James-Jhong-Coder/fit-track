@@ -1,14 +1,12 @@
 import { useModal } from 'vue-final-modal'
 
-import DialogAddExercise from '@/components/dialogs/DialogAddExercise.vue'
+import DialogDeleteConfirm from '@/components/dialogs/DialogDeleteConfirm.vue'
 
-type ExerciseData = { bodyPart: string; name: string }
-
-export function useAddExerciseDialog() {
+export function useDialogDeleteConfirm() {
     const { open, close, patchOptions } = useModal({
-        component: DialogAddExercise,
+        component: DialogDeleteConfirm,
         attrs: {
-            onConfirm(_data: ExerciseData) {
+            onConfirm() {
                 close()
             },
             onCancel() {
@@ -17,11 +15,12 @@ export function useAddExerciseDialog() {
         },
     })
 
-    function openDialog(onConfirmed: (data: ExerciseData) => void) {
+    function openConfirm(onConfirmed: () => void, message?: string) {
         patchOptions({
             attrs: {
-                onConfirm(data: ExerciseData) {
-                    onConfirmed(data)
+                message,
+                onConfirm() {
+                    onConfirmed()
                     close()
                 },
                 onCancel() {
@@ -32,5 +31,5 @@ export function useAddExerciseDialog() {
         open()
     }
 
-    return { open: openDialog, close }
+    return { open: openConfirm, close }
 }
