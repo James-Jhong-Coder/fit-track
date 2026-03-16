@@ -1,29 +1,40 @@
 <script setup lang="ts">
-    import { computed } from 'vue'
-
     const props = defineProps<{
-        bodyParts: string[]
+        bodyParts: { id: string; name: string }[]
     }>()
 
-    const selectedFilter = defineModel<string>()
+    const selectedFilter = defineModel<string | null>()
 
-    const filterOptions = computed(() => [...props.bodyParts, '全部'])
+    const emit = defineEmits<{
+        onOpenDeleteBodyPartDialog: []
+    }>()
 </script>
 
 <template>
     <div class="filter-bar">
         <div class="filter-pills">
             <button
-                v-for="part in filterOptions"
-                :key="part"
                 class="filter-pill"
-                :class="{ 'filter-pill--active': selectedFilter === part }"
-                @click="selectedFilter = part"
+                :class="{ 'filter-pill--active': selectedFilter === null }"
+                @click="selectedFilter = null"
             >
-                {{ part }}
+                全部
+            </button>
+            <button
+                v-for="part in bodyParts"
+                :key="part.id"
+                class="filter-pill"
+                :class="{ 'filter-pill--active': selectedFilter === part.id }"
+                @click="selectedFilter = part.id"
+            >
+                {{ part.name }}
             </button>
         </div>
-        <SvgIcon name="icon_filter_body_part" class="w-5 h-5 text-green-100 shrink-0" />
+        <SvgIcon
+            name="icon_filter_body_part"
+            class="w-5 h-5 text-green-100 shrink-0 cursor-pointer"
+            @click="emit('onOpenDeleteBodyPartDialog')"
+        />
     </div>
 </template>
 

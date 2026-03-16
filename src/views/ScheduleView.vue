@@ -3,7 +3,7 @@
 
     import bgNormal from '@/assets/img/bg_normal.png'
     import CustomDatePicker from '@/components/common/CustomDatePicker.vue'
-    import { useMenuDialog } from '@/composables/useMenuDialog'
+    import { useDialogMenu } from '@/composables/useDialogMenu'
 
     interface ExerciseOption {
         id: number
@@ -15,7 +15,7 @@
         exercises: ExerciseOption[]
     }
 
-    const { open: openMenu } = useMenuDialog()
+    const { open: openMenu } = useDialogMenu()
 
     const selectedDate = ref<Date>(new Date())
 

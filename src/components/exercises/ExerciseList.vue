@@ -1,6 +1,6 @@
 <script setup lang="ts">
     interface ExerciseItem {
-        id: number
+        id: string
         name: string
         originalIndex: number
     }

@@ -1,22 +1,33 @@
 <script setup lang="ts">
-    import { ref } from 'vue'
+    import { computed, ref } from 'vue'
     import { VueFinalModal } from 'vue-final-modal'
 
     import CommonInput from '@/components/common/CommonInput.vue'
     import CommonSelect from '@/components/common/CommonSelect.vue'
 
+    const props = defineProps<{
+        bodyPartOptions: { id: string; name: string }[]
+    }>()
+
     const emit = defineEmits<{
-        confirm: [{ bodyPart: string; name: string }]
+        confirm: [{ name: string; body_part_id: string }]
         cancel: []
     }>()
 
-    const bodyParts = ['肩', '胸', '腿', '核心']
-    const bodyPart = ref<string | undefined>(undefined)
+    const body_part_id = ref<string | undefined>(undefined)
     const name = ref('')
 
+    const bodyPartNames = computed(() => props.bodyPartOptions.map(bp => bp.name))
+    const selectedBodyPartName = computed({
+        get() { return props.bodyPartOptions.find(bp => bp.id === body_part_id.value)?.name },
+        set(val: string | undefined) {
+            body_part_id.value = props.bodyPartOptions.find(bp => bp.name === val)?.id
+        },
+    })
+
     function submit() {
-        if (!bodyPart.value || !name.value) return
-        emit('confirm', { bodyPart: bodyPart.value, name: name.value })
+        if (!body_part_id.value || !name.value) return
+        emit('confirm', { name: name.value, body_part_id: body_part_id.value })
     }
 </script>
 
@@ -37,7 +48,7 @@
 
             <div class="exercise-dialog-body">
                 <!-- 部位 -->
-                <CommonSelect v-model="bodyPart" title="部位" :options="bodyParts" />
+                <CommonSelect v-model="selectedBodyPartName" title="部位" :options="bodyPartNames" />
 
                 <!-- 動作 -->
                 <CommonInput v-model="name" title="動作" class="mt-4" />

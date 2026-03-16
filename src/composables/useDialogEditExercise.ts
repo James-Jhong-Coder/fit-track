@@ -2,13 +2,15 @@ import { useModal } from 'vue-final-modal'
 
 import DialogEditExercise from '@/components/dialogs/DialogEditExercise.vue'
 
-type ExerciseData = { bodyPart: string; name: string }
+export type ExerciseData = { name: string; body_part_id: string }
+export type BodyPartOption = { id: string; name: string }
 
-export function useEditExerciseDialog() {
+export function useDialogEditExercise() {
     const { open, close, patchOptions } = useModal({
         component: DialogEditExercise,
         attrs: {
-            bodyPart: '',
+            bodyPartOptions: [] as BodyPartOption[],
+            body_part_id: '',
             name: '',
             onConfirm(_data: ExerciseData) {
                 close()
@@ -19,10 +21,11 @@ export function useEditExerciseDialog() {
         },
     })
 
-    function openDialog(initial: ExerciseData, onConfirmed: (data: ExerciseData) => void) {
+    function openDialog(bodyPartOptions: BodyPartOption[], initial: ExerciseData, onConfirmed: (data: ExerciseData) => void) {
         patchOptions({
             attrs: {
-                bodyPart: initial.bodyPart,
+                bodyPartOptions,
+                body_part_id: initial.body_part_id,
                 name: initial.name,
                 onConfirm(data: ExerciseData) {
                     onConfirmed(data)
