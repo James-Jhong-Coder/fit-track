@@ -12,7 +12,7 @@
         cancel: []
     }>()
 
-    const { open: openDeleteConfirm } = useDialogDeleteConfirm()
+    const { openDeleteConfirm } = useDialogDeleteConfirm()
 
     function handleDelete(id: string) {
         openDeleteConfirm(() => {

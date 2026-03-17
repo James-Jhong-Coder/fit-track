@@ -2,7 +2,6 @@
     interface ExerciseItem {
         id: string
         name: string
-        originalIndex: number
     }
 
     defineProps<{
@@ -10,8 +9,8 @@
     }>()
 
     const emit = defineEmits<{
-        edit: [index: number]
-        delete: [index: number]
+        edit: [id: string]
+        delete: [id: string]
     }>()
 </script>
 
@@ -22,10 +21,10 @@
                 v-for="(ex, i) in exercises"
                 :key="ex.id"
                 class="exercise-item"
-                @click="emit('edit', ex.originalIndex)"
+                @click="emit('edit', ex.id)"
             >
                 <span class="exercise-name">{{ i + 1 }}. {{ ex.name }}</span>
-                <button class="delete-btn" @click.stop="emit('delete', ex.originalIndex)">
+                <button class="delete-btn" @click.stop="emit('delete', ex.id)">
                     <SvgIcon name="icon_minus" class="w-5 h-5 text-white" />
                 </button>
             </li>

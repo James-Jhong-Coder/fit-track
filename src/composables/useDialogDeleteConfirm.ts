@@ -31,5 +31,5 @@ export function useDialogDeleteConfirm() {
         open()
     }
 
-    return { open: openConfirm, close }
+    return { openDeleteConfirm: openConfirm, close }
 }
