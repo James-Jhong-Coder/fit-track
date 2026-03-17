@@ -1,23 +1,18 @@
+import type { Ref } from 'vue'
 import { useModal } from 'vue-final-modal'
 
 import DialogEditTraining from '@/components/dialogs/DialogEditTraining.vue'
 
-interface ExerciseOption {
-    id: number
-    name: string
-}
-interface PlanData {
-    name: string
-    exercises: ExerciseOption[]
+import type { TrainingPlan, TrainingPlanExercise, TrainingPlanPayload } from './useTrainingPlans'
+
+type TrainingFormData = { name: string; exercises: TrainingPlanExercise[] }
+
+interface UseDialogEditTrainingParams {
+    exercises: Ref<TrainingPlanExercise[]>
+    editTrainingPlan: (id: string, payload: TrainingPlanPayload) => Promise<void>
 }
 
-interface OpenEditTrainingParams {
-    exerciseOptions: ExerciseOption[]
-    initial: PlanData
-    onConfirmed: (data: PlanData) => void
-}
-
-export function useDialogEditTraining() {
+export function useDialogEditTraining({ exercises, editTrainingPlan }: UseDialogEditTrainingParams) {
     const { open, close, patchOptions } = useModal({
         component: DialogEditTraining,
         attrs: {
@@ -33,14 +28,17 @@ export function useDialogEditTraining() {
         },
     })
 
-    function openDialog({ exerciseOptions, initial, onConfirmed }: OpenEditTrainingParams) {
+    function openEditTrainingDialog(plan: TrainingPlan) {
         patchOptions({
             attrs: {
-                exerciseOptions,
-                initialName: initial.name,
-                initialExercises: initial.exercises,
-                onConfirm(data: PlanData) {
-                    onConfirmed(data)
+                exerciseOptions: exercises.value,
+                initialName: plan.name,
+                initialExercises: plan.exercises,
+                async onConfirm(data: TrainingFormData) {
+                    await editTrainingPlan(plan.id, {
+                        name: data.name,
+                        exercise_ids: data.exercises.map(ex => ex.id),
+                    })
                     close()
                 },
                 onCancel() {
@@ -51,5 +49,5 @@ export function useDialogEditTraining() {
         open()
     }
 
-    return { open: openDialog, close }
+    return { openEditTrainingDialog }
 }
