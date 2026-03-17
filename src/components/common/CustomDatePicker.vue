@@ -2,14 +2,14 @@
     import { computed, ref, watch } from 'vue'
 
     interface Plan {
-        id: number
+        id: string
         name: string
     }
 
     interface Props {
         modelValue: Date
         plans?: Plan[]
-        schedule?: Record<string, number[]>
+        schedule?: Record<string, string[]>
     }
 
     const props = withDefaults(defineProps<Props>(), {

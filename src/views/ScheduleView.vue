@@ -4,29 +4,15 @@
     import bgNormal from '@/assets/img/bg_normal.png'
     import CustomDatePicker from '@/components/common/CustomDatePicker.vue'
     import { useDialogMenu } from '@/composables/useDialogMenu'
-
-    interface ExerciseOption {
-        id: number
-        name: string
-    }
-    interface WorkoutPlan {
-        id: number
-        name: string
-        exercises: ExerciseOption[]
-    }
+    import { useSchedules } from '@/composables/useSchedules'
+    import { useTrainingPlans } from '@/composables/useTrainingPlans'
 
     const { open: openMenu } = useDialogMenu()
 
+    const { plans } = useTrainingPlans()
+    const { scheduleItems, scheduleRecord, addSchedule, removeSchedule } = useSchedules()
+
     const selectedDate = ref<Date>(new Date())
-
-    const plans = ref<WorkoutPlan[]>([
-        { id: 1, name: '課表1：槓鈴深蹲', exercises: [{ id: 3, name: '槓鈴深蹲' }] },
-        { id: 2, name: '課表2：槓鈴Rdl', exercises: [{ id: 5, name: '槓鈴Rdl' }] },
-        { id: 3, name: '課表3：哈克深蹲', exercises: [{ id: 4, name: '哈克深蹲' }] },
-    ])
-
-    // 每天可安排多個課表
-    const schedule = ref<Record<string, number[]>>({})
 
     function dateKey(date: Date) {
         const y = date.getFullYear()
@@ -35,10 +21,10 @@
         return `${y}-${m}-${d}`
     }
 
-    const assignedPlans = computed(() => {
+    const assignedItems = computed(() => {
         if (!selectedDate.value) return []
-        const ids = schedule.value[dateKey(selectedDate.value)] ?? []
-        return ids.map(id => plans.value.find(p => p.id === id)).filter(Boolean) as WorkoutPlan[]
+        const key = dateKey(selectedDate.value)
+        return scheduleItems.value.filter(item => item.date === key)
     })
 
     const planNames = computed(() => plans.value.map(p => p.name))
@@ -48,23 +34,12 @@
             return undefined
         },
         set(name: string | undefined) {
-            if (!selectedDate.value) return
+            if (!selectedDate.value || !name) return
             const plan = plans.value.find(p => p.name === name)
-            const key = dateKey(selectedDate.value)
             if (!plan) return
-            const ids = schedule.value[key] ?? []
-            if (!ids.includes(plan.id)) {
-                schedule.value[key] = [...ids, plan.id]
-            }
+            addSchedule(dateKey(selectedDate.value), plan)
         },
     })
-
-    function removePlan(planId: number) {
-        if (!selectedDate.value) return
-        const key = dateKey(selectedDate.value)
-        schedule.value[key] = (schedule.value[key] ?? []).filter(id => id !== planId)
-        if (schedule.value[key].length === 0) delete schedule.value[key]
-    }
 </script>
 
 <template>
@@ -77,7 +52,11 @@
         </div>
 
         <div class="arrange-content">
-            <CustomDatePicker v-model="selectedDate" :plans="plans" :schedule="schedule" />
+            <CustomDatePicker
+                v-model="selectedDate"
+                :plans="plans"
+                :schedule="scheduleRecord"
+            />
 
             <!-- 當日課表 -->
             <div class="day-plan mt-5">
@@ -92,21 +71,25 @@
                     的課表
                 </div>
 
-                <template v-if="assignedPlans.length">
-                    <div v-for="plan in assignedPlans" :key="plan.id" class="plan-card">
+                <template v-if="assignedItems.length">
+                    <div v-for="item in assignedItems" :key="item.scheduleId" class="plan-card">
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-sm font-semibold text-gray-150">
-                                {{ plan.name }}
+                                {{ item.plan.name }}
                             </span>
                             <button
                                 class="text-xs text-gray-150/50 hover:text-gray-150 transition-colors"
-                                @click="removePlan(plan.id)"
+                                @click="removeSchedule(item.scheduleId)"
                             >
                                 取消安排
                             </button>
                         </div>
                         <ul class="flex flex-col gap-2">
-                            <li v-for="ex in plan.exercises" :key="ex.id" class="exercise-row">
+                            <li
+                                v-for="ex in item.plan.exercises"
+                                :key="ex.id"
+                                class="exercise-row"
+                            >
                                 <span class="text-sm text-gray-150">動作：{{ ex.name }}</span>
                             </li>
                         </ul>
