@@ -5,7 +5,10 @@
     import ExerciseList from '@/components/exercises/ExerciseList.vue'
     import { useBodyParts } from '@/composables/useBodyParts'
     import { useDialogAddBodyPart } from '@/composables/useDialogAddBodyPart'
+    import { useDialogAddExercise } from '@/composables/useDialogAddExercise'
     import { useDialogDeleteBodyPart } from '@/composables/useDialogDeleteBodyPart'
+    import { useDialogDeleteConfirm } from '@/composables/useDialogDeleteConfirm'
+    import { useDialogEditExercise } from '@/composables/useDialogEditExercise'
     import { useDialogMenu } from '@/composables/useDialogMenu'
     import { useExercises } from '@/composables/useExercises'
 
@@ -13,9 +16,33 @@
 
     const { bodyParts, addBodyPart, removeBodyPart } = useBodyParts()
     const { openAddBodyPartDialog } = useDialogAddBodyPart({ bodyParts, addBodyPart })
-    const { openDeleteBodyPartDialog } = useDialogDeleteBodyPart({ bodyParts, removeBodyPart })
-    const { selectedFilter, filteredExercises, handleAdd, handleEdit, handleDelete } =
-        useExercises(bodyParts)
+    const {
+        exercises,
+        selectedFilter,
+        filteredExercises,
+        addExercise,
+        editExercise,
+        removeExercise,
+        refreshExercises,
+    } = useExercises()
+
+    const { openDeleteBodyPartDialog } = useDialogDeleteBodyPart({
+        bodyParts,
+        removeBodyPart,
+        onAfterDelete: refreshExercises,
+    })
+    const { openAddExerciseDialog } = useDialogAddExercise({ bodyParts, addExercise })
+    const { openEditExerciseDialog } = useDialogEditExercise({ bodyParts, editExercise })
+    const { openDeleteConfirm } = useDialogDeleteConfirm()
+
+    function handleEdit(id: string) {
+        const exercise = exercises.value.find(ex => ex.id === id)
+        if (exercise) openEditExerciseDialog(exercise)
+    }
+
+    function handleDelete(id: string) {
+        openDeleteConfirm(() => removeExercise(id))
+    }
 </script>
 
 <template>
@@ -40,7 +67,7 @@
             <CommonButton variant="solid" class="flex-1" @click="openAddBodyPartDialog">
                 新增部位
             </CommonButton>
-            <CommonButton variant="solid" class="flex-1" @click="handleAdd">
+            <CommonButton variant="solid" class="flex-1" @click="openAddExerciseDialog">
                 新增動作
             </CommonButton>
         </div>

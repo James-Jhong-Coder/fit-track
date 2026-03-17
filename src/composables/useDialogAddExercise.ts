@@ -1,30 +1,29 @@
+import type { Ref } from 'vue'
 import { useModal } from 'vue-final-modal'
 
 import DialogAddExercise from '@/components/dialogs/DialogAddExercise.vue'
 
-export type ExerciseData = { name: string; body_part_id: string }
-export type BodyPartOption = { id: string; name: string }
+import type { BodyPart } from './useBodyParts'
+import type { ExercisePayload } from './useExercises'
 
-export function useDialogAddExercise() {
+type ExerciseFormData = { name: string; body_part_id: string }
+
+interface UseDialogAddExerciseParams {
+    bodyParts: Ref<BodyPart[]>
+    addExercise: (data: ExercisePayload) => Promise<void>
+}
+
+export function useDialogAddExercise({ bodyParts, addExercise }: UseDialogAddExerciseParams) {
     const { open, close, patchOptions } = useModal({
         component: DialogAddExercise,
-        attrs: {
-            bodyPartOptions: [] as BodyPartOption[],
-            onConfirm(_data: ExerciseData) {
-                close()
-            },
-            onCancel() {
-                close()
-            },
-        },
     })
 
-    function openDialog(bodyPartOptions: BodyPartOption[], onConfirmed: (data: ExerciseData) => void) {
+    function openAddExerciseDialog() {
         patchOptions({
             attrs: {
-                bodyPartOptions,
-                onConfirm(data: ExerciseData) {
-                    onConfirmed(data)
+                bodyPartOptions: bodyParts.value,
+                async onConfirm(data: ExerciseFormData) {
+                    await addExercise(data)
                     close()
                 },
                 onCancel() {
@@ -35,5 +34,5 @@ export function useDialogAddExercise() {
         open()
     }
 
-    return { open: openDialog, close }
+    return { openAddExerciseDialog }
 }

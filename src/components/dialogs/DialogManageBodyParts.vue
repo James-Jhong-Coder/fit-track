@@ -14,7 +14,7 @@
         cancel: []
     }>()
 
-    const { open: openDeleteConfirm } = useDialogDeleteConfirm()
+    const { openDeleteConfirm } = useDialogDeleteConfirm()
 
     const newBodyPart = ref('')
 

@@ -18,7 +18,7 @@
     }
 
     const { open: openMenu } = useDialogMenu()
-    const { open: openDeleteConfirm } = useDialogDeleteConfirm()
+    const { openDeleteConfirm } = useDialogDeleteConfirm()
     const { open: openAddTrainingDialog } = useDialogAddTraining()
     const { open: openEditTrainingDialog } = useDialogEditTraining()
 

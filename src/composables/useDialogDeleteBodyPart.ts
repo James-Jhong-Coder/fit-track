@@ -8,11 +8,13 @@ import type { BodyPart } from './useBodyParts'
 interface UseDialogDeleteBodyPartParams {
     bodyParts: Ref<BodyPart[]>
     removeBodyPart: (id: string) => Promise<void>
+    onAfterDelete?: () => Promise<void>
 }
 
 export function useDialogDeleteBodyPart({
     bodyParts,
     removeBodyPart,
+    onAfterDelete,
 }: UseDialogDeleteBodyPartParams) {
     const { open, close, patchOptions } = useModal({
         component: DialogDeleteBodyPart,
@@ -29,8 +31,9 @@ export function useDialogDeleteBodyPart({
         patchOptions({
             attrs: {
                 bodyParts: bodyParts.value,
-                onDelete(id: string) {
-                    removeBodyPart(id)
+                async onDelete(id: string) {
+                    await removeBodyPart(id)
+                    await onAfterDelete?.()
                     close()
                 },
                 onCancel() {

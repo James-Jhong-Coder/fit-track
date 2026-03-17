@@ -1,18 +1,26 @@
+import type { Ref } from 'vue'
 import { useModal } from 'vue-final-modal'
 
 import DialogEditExercise from '@/components/dialogs/DialogEditExercise.vue'
 
-export type ExerciseData = { name: string; body_part_id: string }
-export type BodyPartOption = { id: string; name: string }
+import type { BodyPart } from './useBodyParts'
+import type { Exercise, ExercisePayload } from './useExercises'
 
-export function useDialogEditExercise() {
+type ExerciseFormData = { name: string; body_part_id: string }
+
+interface UseDialogEditExerciseParams {
+    bodyParts: Ref<BodyPart[]>
+    editExercise: (id: string, data: ExercisePayload) => Promise<void>
+}
+
+export function useDialogEditExercise({ bodyParts, editExercise }: UseDialogEditExerciseParams) {
     const { open, close, patchOptions } = useModal({
         component: DialogEditExercise,
         attrs: {
-            bodyPartOptions: [] as BodyPartOption[],
+            bodyPartOptions: [],
             body_part_id: '',
             name: '',
-            onConfirm(_data: ExerciseData) {
+            onConfirm(_data: ExerciseFormData) {
                 close()
             },
             onCancel() {
@@ -21,14 +29,14 @@ export function useDialogEditExercise() {
         },
     })
 
-    function openDialog(bodyPartOptions: BodyPartOption[], initial: ExerciseData, onConfirmed: (data: ExerciseData) => void) {
+    function openEditExerciseDialog(exercise: Exercise) {
         patchOptions({
             attrs: {
-                bodyPartOptions,
-                body_part_id: initial.body_part_id,
-                name: initial.name,
-                onConfirm(data: ExerciseData) {
-                    onConfirmed(data)
+                bodyPartOptions: bodyParts.value,
+                name: exercise.name,
+                body_part_id: exercise.body_part_id ?? '',
+                async onConfirm(data: ExerciseFormData) {
+                    await editExercise(exercise.id, data)
                     close()
                 },
                 onCancel() {
@@ -39,5 +47,5 @@ export function useDialogEditExercise() {
         open()
     }
 
-    return { open: openDialog, close }
+    return { openEditExerciseDialog }
 }
