@@ -1,38 +1,49 @@
+import type { Ref } from 'vue'
 import { useModal } from 'vue-final-modal'
 
 import DialogAddTraining from '@/components/dialogs/DialogAddTraining.vue'
 
-interface ExerciseOption { id: number; name: string }
-interface PlanData { name: string; exercises: ExerciseOption[] }
+import type { TrainingPlanExercise, TrainingPlanPayload } from './useTrainingPlans'
 
-interface OpenAddTrainingParams {
-    exerciseOptions: ExerciseOption[]
-    onConfirmed: (data: PlanData) => void
+type TrainingFormData = { name: string; exercises: TrainingPlanExercise[] }
+
+interface UseDialogAddTrainingParams {
+    exercises: Ref<TrainingPlanExercise[]>
+    addTrainingPlan: (payload: TrainingPlanPayload) => Promise<void>
 }
 
-export function useDialogAddTraining() {
+export function useDialogAddTraining({ exercises, addTrainingPlan }: UseDialogAddTrainingParams) {
     const { open, close, patchOptions } = useModal({
         component: DialogAddTraining,
         attrs: {
             exerciseOptions: [],
-            onConfirm() { close() },
-            onCancel() { close() },
+            onConfirm() {
+                close()
+            },
+            onCancel() {
+                close()
+            },
         },
     })
 
-    function openDialog({ exerciseOptions, onConfirmed }: OpenAddTrainingParams) {
+    function openAddTrainingDialog() {
         patchOptions({
             attrs: {
-                exerciseOptions,
-                onConfirm(data: PlanData) {
-                    onConfirmed(data)
+                exerciseOptions: exercises.value,
+                async onConfirm(data: TrainingFormData) {
+                    await addTrainingPlan({
+                        name: data.name,
+                        exercise_ids: data.exercises.map(ex => ex.id),
+                    })
                     close()
                 },
-                onCancel() { close() },
+                onCancel() {
+                    close()
+                },
             },
         })
         open()
     }
 
-    return { open: openDialog, close }
+    return { openAddTrainingDialog }
 }

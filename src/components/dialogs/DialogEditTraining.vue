@@ -6,7 +6,7 @@
     import CommonSelect from '@/components/common/CommonSelect.vue'
 
     interface ExerciseOption {
-        id: number
+        id: string
         name: string
     }
 
@@ -22,7 +22,7 @@
     }>()
 
     const planName = ref(props.initialName)
-    const selectedExercises = ref<ExerciseOption[]>([...props.initialExercises])
+    const selectedExercises = ref<ExerciseOption[]>([...(props.initialExercises ?? [])])
     const exerciseToAdd = ref<string | undefined>(undefined)
 
     const availableExercises = computed(() =>

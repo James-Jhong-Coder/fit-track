@@ -6,7 +6,7 @@
     import CommonSelect from '@/components/common/CommonSelect.vue'
 
     interface ExerciseOption {
-        id: number
+        id: string
         name: string
     }
 
@@ -78,9 +78,9 @@
                     />
                 </div>
                 <ul v-if="selectedExercises.length" class="mt-6 flex flex-col gap-2">
-                    <li v-for="ex in selectedExercises" :key="ex.id" class="exercise-item">
+                    <li v-for="(ex, i) in selectedExercises" :key="ex.id" class="exercise-item">
                         <span class="text-sm text-gray-150">動作：{{ ex.name }}</span>
-                        <SvgIcon name="icon_minus" class="w-6 h-6 text-red-700" />
+                        <SvgIcon name="icon_minus" class="w-6 h-6 text-red-700" @click="removeExercise(i)" />
                     </li>
                 </ul>
             </div>

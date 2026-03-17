@@ -6,38 +6,21 @@
     import { useDialogDeleteConfirm } from '@/composables/useDialogDeleteConfirm'
     import { useDialogEditTraining } from '@/composables/useDialogEditTraining'
     import { useDialogMenu } from '@/composables/useDialogMenu'
+    import { useExercises } from '@/composables/useExercises'
+    import { useTrainingPlans } from '@/composables/useTrainingPlans'
 
-    interface ExerciseOption {
-        id: number
-        name: string
-    }
-    interface WorkoutPlan {
-        id: number
-        name: string
-        exercises: ExerciseOption[]
-    }
+    import type { TrainingPlan } from '@/composables/useTrainingPlans'
 
     const { open: openMenu } = useDialogMenu()
     const { openDeleteConfirm } = useDialogDeleteConfirm()
-    const { open: openAddTrainingDialog } = useDialogAddTraining()
-    const { open: openEditTrainingDialog } = useDialogEditTraining()
+
+    const { exercises } = useExercises()
+    const { plans, addTrainingPlan, editTrainingPlan, removeTrainingPlan } = useTrainingPlans()
+
+    const { openAddTrainingDialog } = useDialogAddTraining({ exercises, addTrainingPlan })
+    const { openEditTrainingDialog } = useDialogEditTraining({ exercises, editTrainingPlan })
 
     const searchQuery = ref('')
-
-    const exerciseOptions = ref<ExerciseOption[]>([
-        { id: 1, name: '槓鈴臥推' },
-        { id: 2, name: '啞鈴肩推' },
-        { id: 3, name: '槓鈴深蹲' },
-        { id: 4, name: '哈克深蹲' },
-        { id: 5, name: '槓鈴Rdl' },
-        { id: 6, name: '三頭下壓' },
-    ])
-
-    const plans = ref<WorkoutPlan[]>([
-        { id: 1, name: '課表1：槓鈴深蹲', exercises: [{ id: 3, name: '槓鈴深蹲' }] },
-        { id: 2, name: '課表2：槓鈴Rdl', exercises: [{ id: 5, name: '槓鈴Rdl' }] },
-        { id: 3, name: '課表3：哈克深蹲', exercises: [{ id: 4, name: '哈克深蹲' }] },
-    ])
 
     const filteredPlans = computed(() => {
         if (!searchQuery.value) return plans.value
@@ -46,31 +29,8 @@
         )
     })
 
-    function onClickAddNewTrainingHandler() {
-        openAddTrainingDialog({
-            exerciseOptions: exerciseOptions.value,
-            onConfirmed: data => {
-                plans.value.push({ id: Date.now(), ...data })
-            },
-        })
-    }
-
-    function onClickEditTrainingHandler(plan: WorkoutPlan) {
-        openEditTrainingDialog({
-            exerciseOptions: exerciseOptions.value,
-            initial: { name: plan.name, exercises: plan.exercises },
-            onConfirmed: data => {
-                const idx = plans.value.findIndex(p => p.id === plan.id)
-                if (idx !== -1) plans.value[idx] = { id: plan.id, ...data }
-            },
-        })
-    }
-
-    function onClickDeleteTrainingHandler(plan: WorkoutPlan) {
-        openDeleteConfirm(() => {
-            const idx = plans.value.findIndex(p => p.id === plan.id)
-            if (idx !== -1) plans.value.splice(idx, 1)
-        })
+    function onClickDeleteTrainingHandler(plan: TrainingPlan) {
+        openDeleteConfirm(() => removeTrainingPlan(plan.id))
     }
 </script>
 
@@ -84,7 +44,7 @@
         </div>
 
         <div class="training-content">
-            <CommonButton variant="solid" class="w-full" @click="onClickAddNewTrainingHandler">
+            <CommonButton variant="solid" class="w-full" @click="openAddTrainingDialog">
                 新增課表
             </CommonButton>
 
@@ -101,10 +61,13 @@
                     <li v-for="(plan, i) in filteredPlans" :key="plan.id" class="plan-item">
                         <span class="text-sm text-gray-150">{{ i + 1 }}. {{ plan.name }}</span>
                         <div class="flex items-center gap-2">
-                            <button class="action-btn" @click="onClickEditTrainingHandler(plan)">
+                            <button class="action-btn" @click="openEditTrainingDialog(plan)">
                                 <SvgIcon name="icon_edit" class="w-5 h-5 text-gray-150/60" />
                             </button>
-                            <button class="delete-btn" @click="onClickDeleteTrainingHandler(plan)">
+                            <button
+                                class="delete-btn"
+                                @click="onClickDeleteTrainingHandler(plan)"
+                            >
                                 <SvgIcon name="icon_minus" class="w-5 h-5" />
                             </button>
                         </div>
